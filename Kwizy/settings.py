@@ -37,7 +37,18 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    # newly added functionalities
+    'departmentDetails.apps.DepartmentdetailsConfig',
+    'quizDetails.apps.QuizdetailsConfig',
+    'questionDetails.apps.QuestiondetailsConfig',
+    
+    # API associates
+    'rest_framework',
+    'coreapi',
+    'drf_yasg',
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -66,6 +77,10 @@ TEMPLATES = [
         },
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+}
 
 WSGI_APPLICATION = 'Kwizy.wsgi.application'
 
