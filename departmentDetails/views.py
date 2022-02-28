@@ -1,5 +1,6 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse
 
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
@@ -29,10 +30,12 @@ def getLevel(request, detail_pk=None):
         This endpoint will query out a
          level provided by the id.
     """
-    data = Level.objects.get(id=detail_pk)
-    serializer = LevelSerializer(data)
-    return Response(serializer.data)
-
+    try:
+        data = Level.objects.get(id=detail_pk)
+        serializer = LevelSerializer(data)
+        return Response(serializer.data)
+    except Level.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND, )
 
 @api_view(['GET'])
 def get_subject(request):
