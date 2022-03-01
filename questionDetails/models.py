@@ -45,7 +45,7 @@ class Answer(models.Model):
         return str(self.correct)
 
     @property
-    def AnswerPicUrl(self):
+    def answerPicUrl(self):
         try:
             url = self.ans_image.url
         except:

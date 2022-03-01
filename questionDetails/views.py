@@ -26,28 +26,20 @@ def quizQuestion(request, quiz_pk, quiz_slug:str):
     """
     quiz = Quiz.objects.get(
             Q(id=quiz_pk) & Q(slug__iexact=quiz_slug) )
-    ques_image, questions, question_image = '', [], []
 
+    questions = []
     for question in quiz.get_questions():
-        if (ques_image := question.questionPicUrl):
-            pass
+        if question.questionPicUrl or question.question_text:
+            quest = (question.question_text, question.questionPicUrl)
         answers = []
-        ans_image = []
         for ans in question.get_ans():
-            if ans.AnswerPicUrl:
-                ans_image.append(ans.AnswerPicUrl)
-            answers.append(ans.answer_text)
-        questions.append({str(question) : answers})
-
-        question_image.append(
-            {
-                'question image':ques_image,
-                "answer image": ans_image
-            }
-        )
+            if ans.answerPicUrl or ans.answer_text:
+                ans_image = (ans.answer_text, ans.answerPicUrl)     
+            answers.append(ans_image)
+        questions.append({str(quest) : answers})
     data = {
         'questions': questions, 
-        'question-image':question_image, 
         'time':quiz.time
     }
-    return Response(data)
+    return Response(data)   
+            
