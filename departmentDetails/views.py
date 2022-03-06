@@ -15,7 +15,7 @@ def index(request):
     )
 
 @api_view(['GET'])
-def getLevels(request):
+def getlevels(request):
     """
         This endpoint will query out all the 
         associated levels in the database(100-400)
@@ -25,7 +25,7 @@ def getLevels(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
-def getLevel(request, detail_pk=None):
+def getlevel(request, detail_pk=None):
     """
         This endpoint will query out a
          level provided by the id.

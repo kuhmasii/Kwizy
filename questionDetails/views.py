@@ -10,7 +10,7 @@ from rest_framework import status
 
 
 @api_view(["GET"])
-def getQuestions(request):
+def getquestions(request):
     """
         This endpoint returns all question data.
     """
@@ -19,7 +19,7 @@ def getQuestions(request):
     return Response(serializer.data)
 
 @api_view(["GET"])
-def quizQuestion(request, quiz_pk, quiz_slug:str):
+def quiz_question(request, quiz_pk, quiz_slug:str):
     """
         This endpoint queries out the questions of a selected course from
         the modal dialogue.

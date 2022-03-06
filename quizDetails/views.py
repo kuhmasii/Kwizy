@@ -8,7 +8,7 @@ from departmentDetails.models import Level
 from .models import Quiz
 
 @api_view(['GET'])
-def getAllQuiz(request):
+def get_all_quiz(request):
     """
     This endpoint will query out all the courses.
     """
@@ -17,10 +17,12 @@ def getAllQuiz(request):
     return Response(serialize.data)
 
 @api_view(['GET'])
-def get100Quiz(request):
+def get_100_quiz(request):
     """
     This endpoint will query out all 100 level courses.
     """
+    # Database must not be updated in the future
+    # pk1 should be for 100 level so as the rest
     try:
         level = Level.objects.get(pk=1)
         quizes = Quiz.objects.filter(level=level)
@@ -30,7 +32,7 @@ def get100Quiz(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def get200Quiz(request):
+def get_200_quiz(request):
     """
     This endpoint will query out all 200 level courses.
     """
@@ -43,7 +45,7 @@ def get200Quiz(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def get300Quiz(request):
+def get_300_quiz(request):
     """
     This endpoint will query out all 300 level courses.
     """
@@ -56,7 +58,7 @@ def get300Quiz(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(['GET'])
-def get400Quiz(request):
+def get_400_quiz(request):
     """
     This endpoint will query out all 400 level courses.
     """
@@ -69,7 +71,7 @@ def get400Quiz(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(["GET"])
-def getQuiz(request, quiz_pk, quiz_slug:str):
+def get_quiz(request, quiz_pk, quiz_slug:str):
     """
     This endpoint will query out the associated course provided by 
     the id(id) and slug(quiz-slug) respectively.
@@ -83,7 +85,7 @@ def getQuiz(request, quiz_pk, quiz_slug:str):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 @api_view(["GET"])
-def courseSubject(request, level_slug:str, course_subject:str):
+def course_subject(request, level_slug:str, course_subject:str):
     """
         This endpoint will query out all the courses related 
         to the quiz under the subject and the level eg(Biology, 100). 
