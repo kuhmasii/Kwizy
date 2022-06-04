@@ -37,12 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     # newly added functionalities
+    'api.apps.ApiConfig',
     'departmentDetails.apps.DepartmentdetailsConfig',
     'quizDetails.apps.QuizdetailsConfig',
     'questionDetails.apps.QuestiondetailsConfig',
-    
+
     # API associates
     'rest_framework',
     'coreapi',

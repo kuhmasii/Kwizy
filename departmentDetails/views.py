@@ -1,50 +1,18 @@
-from django.http import HttpResponse
-
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-
 from .serializers import LevelSerializer
+from rest_framework import generics
 from .models import Level
 
 
+class LevelListAPIView(generics.ListAPIView):
+    queryset = Level.objects.all()
+    serializer_class = LevelSerializer
 
-def index(request):
-    return HttpResponse('<H1>add any of these (/docs, /swagger, /redocs)\
-        to check documentation</H1>'
-    )
 
-@api_view(['GET'])
-def getlevels(request):
-    """
-        This endpoint will query out all the 
-        associated levels in the database(100-400)
-    """
-    data = Level.objects.all()
-    serializer = LevelSerializer(data, many=True)
-    return Response(serializer.data)
+class LevelDetailAPIView(generics.RetrieveAPIView):
+    queryset = Level.objects.all()
+    serializer_class = LevelSerializer
+    lookup_field = 'pk'
 
-@api_view(['GET'])
-def getlevel(request, detail_pk=None):
-    """
-        This endpoint will query out a
-         level provided by the id.
-    """
-    try:
-        data = Level.objects.get(id=detail_pk)
-        serializer = LevelSerializer(data)
-        return Response(serializer.data)
-    except Level.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND, )
 
-@api_view(['GET'])
-def get_subject(request):
-    """
-        This endpoint will query out each subjects that
-        belong to a particular level.
-    """
-    levels = Level.objects.all()
-    subjects = {}
-    for x in levels:
-       subjects[x.name] = list(x.get_subject())
-    return Response(subjects)
+level_list = LevelListAPIView()
+level_detail = LevelDetailAPIView()
