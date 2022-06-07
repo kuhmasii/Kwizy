@@ -48,7 +48,6 @@ class Quiz(models.Model):
 
     def get_questions(self):
         all_questions = self.question_quiz.all()
-        print(all_questions)
         # frontend functionality should shuffle and Limit
         # the questions based on number_of_question field
         return all_questions
