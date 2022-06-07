@@ -1,45 +1,54 @@
-from django.shortcuts import render
-from questionDetails.models import Question
+from rest_framework.status import HTTP_404_NOT_FOUND
+from rest_framework import generics
 from quizDetails.models import Quiz
-from .serializers import QuestionSerializer
-from django.db.models import Q
-
+from rest_framework.views import APIView
+from questionDetails.models import Question, Answer
+from .serializers import QuestionSerializer, AnswerSerialier
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from rest_framework import status
+from rest_framework.permissions import AllowAny
 
 
-@api_view(["GET"])
-def getquestions(request):
-    """
-        This endpoint returns all question data.
-    """
-    questions = Question.objects.all()
-    serializer = QuestionSerializer(questions, many=True)
-    return Response(serializer.data)
+class QuestionListAPIView(generics.ListAPIView):
+    queryset = Question.objects.all()
+    serializer_class = QuestionSerializer
+    permission_classes = (AllowAny, )
 
-@api_view(["GET"])
-def quiz_question(request, quiz_pk, quiz_slug:str):
-    """
-        This endpoint queries out the questions of a selected course from
-        the modal dialogue.
-    """
-    quiz = Quiz.objects.get(
-            Q(id=quiz_pk) & Q(slug__iexact=quiz_slug) )
 
-    questions = []
-    for question in quiz.get_questions():
-        if question.questionPicUrl or question.question_text:
-            quest = (question.question_text, question.questionPicUrl)
-        answers = []
-        for ans in question.get_ans():
-            if ans.answerPicUrl or ans.answer_text:
-                ans_image = (ans.answer_text, ans.answerPicUrl)     
-            answers.append(ans_image)
-        questions.append({str(quest) : answers})
-    data = {
-        'questions': questions, 
-        'time':quiz.time
-    }
-    return Response(data)   
-            
+class AnswerListAPIView(generics.ListAPIView):
+    queryset = Answer.objects.all()
+    serializer_class = AnswerSerialier
+    permission_classes = (AllowAny, )
+
+
+class QuestionCourseListAPIView(APIView):
+    permission_classes = (AllowAny, )
+
+    def get(self, request, pk):
+        try:
+            questions = Quiz.objects.get(pk=pk).get_questions()
+        except Quiz.DoesNotExist():
+            return Response(
+                {'message': HTTP_404_NOT_FOUND}
+            )
+        serializer = QuestionSerializer(questions, many=True)
+        return Response(serializer.data)
+
+
+class AnswerCourseListAPIView(APIView):
+    permission_classes = (AllowAny, )
+
+    def get(self, request, pk):
+        try:
+            answers = Question.objects.get(pk=pk).get_ans()
+        except Question.DoesNotExist():
+            return Response(
+                {'message': HTTP_404_NOT_FOUND}
+            )
+        serializer = AnswerSerialier(answers, many=True)
+        return Response(serializer.data)
+
+
+question_list = QuestionListAPIView()
+questioncourse_list = QuestionCourseListAPIView()
+answer_list = AnswerListAPIView()
+answercourse_list = AnswerCourseListAPIView()
