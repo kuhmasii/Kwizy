@@ -23,5 +23,4 @@ class LevelSerializer(serializers.ModelSerializer):
         if not hasattr(obj, 'id'):
             return None
         # can alter the data of an instance using obj
-        print(obj.get_subject())
         return obj.get_subject()
